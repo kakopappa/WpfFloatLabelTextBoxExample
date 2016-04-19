@@ -1,0 +1,81 @@
+﻿<Window x:Class="WpfFloatLabelTextBoxExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfFloatLabelTextBoxExample"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+
+        <Color x:Key="ColorTheme">#FF0078D7</Color>
+        <SolidColorBrush x:Key="ThemeColor" Color="{StaticResource ColorTheme}" />
+
+        <Style x:Key="TextBoxStyle1" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="15" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="2" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock x:Name="FloatLabelFocused" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="12" Text="{TemplateBinding Tag}" Foreground="{TemplateBinding Foreground}" FontFamily="Segoe UI Semibold" FontWeight="Medium"/>
+                            <ScrollViewer Grid.Row="1" x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center" />
+                            <Label Grid.Row="1" Style="{DynamicResource MetroWatermark}" Margin="5,0,0,0" x:Name="WaterMarkLabel" Content="{TemplateBinding Tag}" VerticalAlignment="Center"  Visibility="Collapsed" />
+                            <Rectangle x:Name="underlineRect" Margin="5,0,0,0" Grid.Row="2" HorizontalAlignment="Stretch" Fill="Black" Height="1"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Visibility" TargetName="WaterMarkLabel" Value="Visible"/>
+                                    <Setter Property="Visibility" TargetName="FloatLabelFocused" Value="Hidden"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
+
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value="{x:Null}"/>
+                                    <Condition Property="IsFocused" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Fill" TargetName="underlineRect" Value="{StaticResource ThemeColor}"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
+
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Fill" TargetName="underlineRect" Value="{StaticResource ThemeColor}"/>
+                                <Setter Property="Height" TargetName="underlineRect" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+
+
+    <Grid>
+        <TextBox Height="60" Width="200" Tag="Watermark here" Style="{StaticResource TextBoxStyle1}" ></TextBox>
+        <Button x:Name="button" Content="Button" Margin="155.5,41,158.5,0" VerticalAlignment="Top" Height="70.5"/>
+    </Grid>
+</Window>
