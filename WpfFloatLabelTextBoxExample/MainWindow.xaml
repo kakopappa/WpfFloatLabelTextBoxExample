@@ -33,7 +33,17 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock x:Name="FloatLabelFocused" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="12" Text="{TemplateBinding Tag}" Foreground="{TemplateBinding Foreground}" FontFamily="Segoe UI Semibold" FontWeight="Medium"/>
+                            <TextBlock x:Name="FloatLabelFocused" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="12" Text="{TemplateBinding Tag}" Foreground="{TemplateBinding Foreground}" FontFamily="Segoe UI Semibold" FontWeight="Medium">
+                                <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform />
+                                            <SkewTransform />
+                                            <RotateTransform />
+                                            <TranslateTransform />
+                                        </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            
                             <ScrollViewer Grid.Row="1" x:Name="PART_ContentHost" Margin="5,0,0,0" VerticalAlignment="Center" />
                             <Label Grid.Row="1" Style="{DynamicResource MetroWatermark}" Margin="5,0,0,0" x:Name="WaterMarkLabel" Content="{TemplateBinding Tag}" VerticalAlignment="Center"  Visibility="Collapsed" />
                             <Rectangle x:Name="underlineRect" Margin="5,0,0,0" Grid.Row="2" HorizontalAlignment="Stretch" Fill="Black" Height="1"/>
@@ -59,6 +69,28 @@
                                     <Setter Property="Fill" TargetName="underlineRect" Value="{StaticResource ThemeColor}"/>
                                 </MultiTrigger.Setters>
                             </MultiTrigger>
+                            
+                            <MultiTrigger>
+                                    
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value=""/>
+                                <Condition Property="IsFocused" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard >
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="FloatLabelFocused" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="15"/>
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CircleEase EasingMode="EaseOut"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                        </MultiTrigger>
 
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter Property="Fill" TargetName="underlineRect" Value="{StaticResource ThemeColor}"/>
